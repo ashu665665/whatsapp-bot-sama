@@ -1,5 +1,7 @@
 FROM maven:3.6.3-openjdk-11
 
+ARG SPRING_PROFILE=dev
+
 # Create the application directory
 WORKDIR /app
 
@@ -10,6 +12,6 @@ COPY . .
 RUN if [ -f /etc/secrets/secrets.env ]; then export $(cat /etc/secrets/secrets.env | xargs); fi
 
 # Build the application with the active profile
-RUN mvn clean install
+RUN mvn clean install -Dspring.profiles.active=${SPRING_PROFILE}
 
 CMD ["java", "-jar", "target/bot-0.0.1-SNAPSHOT.jar"]

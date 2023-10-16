@@ -9,7 +9,7 @@ WORKDIR /app
 COPY . .
 
 # Check if secrets.env exists and set environment variables if it does
-RUN if [ -f /etc/secrets/secrets.env ]; then export $(cat /etc/secrets/secrets.env | xargs); fi
+RUN --mount=type=secret,id=_env,dst=/etc/secrets/secrets.env cat /etc/secrets/secrets.env
 
 # Build the application with the active profile
 RUN mvn clean install -Dspring.profiles.active=${SPRING_PROFILE}

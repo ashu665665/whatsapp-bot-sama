@@ -21,10 +21,10 @@ WORKDIR /app
 COPY --from=build /app/target/bot-0.0.1-SNAPSHOT.jar /app/bot-0.0.1-SNAPSHOT.jar
 
 # Copy the secrets environment file into the container at /etc/secrets/secrets.env
-COPY secrets.env /etc/secrets/
+COPY secrets.env /docker/secrets/
 
 # Expose the port your application runs on
 EXPOSE 8080
 
 # Specify the command to run your Spring Boot application with the environment file
-CMD ["java", "-jar", "bot-0.0.1-SNAPSHOT.jar", "--spring.config.additional-location=file:/etc/secrets/secrets.env"]
+CMD ["java", "-jar", "bot-0.0.1-SNAPSHOT.jar", "--spring.config.additional-location=file:/docker/secrets/secrets.env"]

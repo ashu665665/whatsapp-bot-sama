@@ -21,7 +21,7 @@ WORKDIR /app
 COPY --from=build /app/target/bot-0.0.1-SNAPSHOT.jar /app/bot-0.0.1-SNAPSHOT.jar
 
 # Copy the secrets environment file into the container at /etc/secrets/secrets.env
-COPY secrets.env /docker/secrets/
+COPY /etc/secrets/secrets.env /docker/secrets/
 
 # Expose the port your application runs on
 EXPOSE 8080

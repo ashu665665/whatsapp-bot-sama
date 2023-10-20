@@ -33,10 +33,9 @@ public class MessageController {
     private String logoUrl;
 
 
-    private String ACCOUNT_SID = System.getProperty("TWILIO_ACCOUNT_SID");
+    private String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
 
-
-    private String AUTH_TOKEN = System.getProperty("TWILIO_AUTH_TOKEN");
+    private String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
 
     @Value("${account}")
     private String ACCOUNT;

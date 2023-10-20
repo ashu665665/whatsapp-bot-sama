@@ -1,5 +1,5 @@
-# Use an official OpenJDK image as a parent image for the build stage
-FROM openjdk:11-jre-slim AS build
+# Use an official Maven image as the parent image for the build stage
+FROM maven:3.6.3-jdk-11 AS build
 
 # Set the working directory to /app
 WORKDIR /app
@@ -8,22 +8,23 @@ WORKDIR /app
 COPY pom.xml .
 COPY src src
 
-# Build the JAR file using Maven
-RUN ./mvnw package
+# Build the JAR file using Maven without running tests
+RUN mvn package -DskipTests
 
-# Use an official OpenJDK runtime image as a parent image for the final stage
+# Use an official OpenJDK runtime image as the parent image for the final stage
 FROM openjdk:11-jre-slim
 
 # Set the working directory to /app
 WORKDIR /app
 
 # Copy the JAR file from the build stage
-COPY --from=build /app/target/bot-0.0.1-SNAPSHOT.jar /bot-0.0.1-SNAPSHOT.jar
-# Copy the secret.env file into the container
-COPY /etc/secrets/secrets.env /app/secrets.env
+COPY --from=build /app/target/bot-0.0.1-SNAPSHOT.jar /app/bot-0.0.1-SNAPSHOT.jar
+
+# Copy the secrets environment file into the container at /etc/secrets/secrets.env
+COPY secrets.env /etc/secrets/secrets.env
 
 # Expose the port your application runs on
 EXPOSE 8080
 
-# Run the application with the secrets
-CMD ["java", "-jar", "your-application.jar"]
+# Specify the command to run your Spring Boot application with the environment file
+CMD ["java", "-jar", "bot-0.0.1-SNAPSHOT.jar", "--spring.config.additional-location=file:/etc/secrets/secrets.env"]

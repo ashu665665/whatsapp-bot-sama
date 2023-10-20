@@ -32,11 +32,11 @@ public class MessageController {
     @Value("${logoURL}")
     private String logoUrl;
 
-    @Value("${account_sid}")
-    private String ACCOUNT_SID;
 
-    @Value("${auth_token}")
-    private String AUTH_TOKEN;
+    private String ACCOUNT_SID = System.getProperty("TWILIO_ACCOUNT_SID");
+
+
+    private String AUTH_TOKEN = System.getProperty("TWILIO_AUTH_TOKEN");
 
     @Value("${account}")
     private String ACCOUNT;

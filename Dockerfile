@@ -21,9 +21,7 @@ WORKDIR /app
 COPY --from=build /app/target/bot-0.0.1-SNAPSHOT.jar /app/bot-0.0.1-SNAPSHOT.jar
 
 # Copy the secrets environment file into the container at /etc/secrets/secrets.env
-COPY secrets.env /app/
 
-RUN chmod 600 /app/secrets.env
 
 # Specify the command to run your Spring Boot application with the environment file
-CMD ["java", "-jar", "bot-0.0.1-SNAPSHOT.jar", "--spring.config.additional-location=file:/app/secrets.env"]
+CMD ["java", "-jar", "bot-0.0.1-SNAPSHOT.jar"]

@@ -1,7 +1,6 @@
 package com.whatsapp.bot.controller;
 
 import com.twilio.Twilio;
-import com.twilio.http.Response;
 import com.twilio.rest.api.v2010.account.Message;
 import com.whatsapp.bot.entity.FileCaseRequest;
 import com.whatsapp.bot.entity.ResponseData;
@@ -11,17 +10,13 @@ import com.whatsapp.bot.service.IAccountService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 @RestController
@@ -32,10 +27,11 @@ public class MessageController {
     @Value("${logoURL}")
     private String logoUrl;
 
+    @Value("${account_sid:System.getenv(\"TWILIO_ACCOUNT_SID\")}")
+    private String ACCOUNT_SID;
 
-    private String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
-
-    private String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
+    @Value("${auth_token:System.getenv(\"TWILIO_AUTH_TOKEN\")}")
+    private String AUTH_TOKEN;
 
     @Value("${account}")
     private String ACCOUNT;

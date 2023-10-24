@@ -64,7 +64,7 @@ Please note that you should have Docker, Also you have to build the application 
 
 To test the flow, you can use a sandbox account of Twilio:
 
-1. Scan the [QR code] (https://drive.google.com/file/d/1wRw4rv5tjYFdYJC5eRuyyo3GMXSOQCJc/view?usp=sharing) to add it to the sandbox group.
+1. Scan the [QR code] (https://drive.google.com/file/d/1PQ7k9KQQXr6LOFhYefGmIJR57dn_o0ZL/view?usp=sharing) to add it to the sandbox group.
 
 2. Once added, just message "Hi@Sama" to the same number to initialize a conversation.
 

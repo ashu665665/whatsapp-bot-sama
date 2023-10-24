@@ -28,7 +28,7 @@ public class AccountServiceImpl implements IAccountService {
     public ResponseData caseFile(FileCaseRequest fileCaseRequest) {
         try {
             String url = UriComponentsBuilder.fromHttpUrl(apiBaseUrl)
-                    .path("/create")
+                    .path("/api/complaint/create")
                     .queryParam("vua", "")
                     .queryParam("organizationUid", "O8MLRR28B888DFE5")
                     .queryParam("complaintCategory", fileCaseRequest.getComplaintCategory())
@@ -56,7 +56,7 @@ public class AccountServiceImpl implements IAccountService {
     public ResponseData getCase(String caseNumber) {
         try {
             String url = UriComponentsBuilder.fromHttpUrl(apiBaseUrl)
-                    .path("/" + caseNumber)
+                    .path("/api/complaint/" + caseNumber)
                     .toUriString();
 
             ResponseEntity<ComplaintResponse> response = restTemplate.getForEntity(url, ComplaintResponse.class);

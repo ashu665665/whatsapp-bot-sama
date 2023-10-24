@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -24,30 +25,36 @@ import java.util.function.Consumer;
 @Log4j2
 public class MessageController {
 
+    @Autowired
+    private IAccountService accountService;
+
     @Value("${logoURL}")
     private String logoUrl;
 
-    @Value("${account_sid:System.getenv(\"TWILIO_ACCOUNT_SID\")}")
-    private String ACCOUNT_SID;
+    @Value("${account_sid:#{null}}")
+    private String account_sid;
 
-    @Value("${auth_token:System.getenv(\"TWILIO_AUTH_TOKEN\")}")
-    private String AUTH_TOKEN;
+    @Value("${auth_token:#{null}}")
+    private String auth_token;
 
-    @Value("${account}")
-    private String ACCOUNT;
+    @Value("${webhook_trigger_msg}")
+    private String trigger_msg;
 
     @Value("${session_timeout_ms:90000}")
     private long sessionTimeoutMs;
 
     private String account_whatsapp;
 
-    @Autowired
-    private IAccountService accountService;
-
     private final Map<String, UserStateEnum> userStates = new HashMap<>();
     private final Map<String, UserStateEnum> fileCase = new HashMap<>();
     private final Map<String, FileCaseRequest> userFileCaseRequests = new HashMap<>();
     private final Map<String, Long> userLastActivityTimestamps = new HashMap<>();
+
+    @PostConstruct
+    public void initialize() throws Exception {
+        account_sid = account_sid != null ? account_sid : System.getenv("TWILIO_ACCOUNT_SID");
+        auth_token = auth_token != null ? auth_token : System.getenv("TWILIO_AUTH_TOKEN");
+    }
 
     @PostMapping("/fromtwilio")
     public void receiveMessage(TwilioMessage message) {
@@ -62,12 +69,14 @@ public class MessageController {
 
             switch (userState) {
                 case INITIAL:
-                    if (message.getBody().toLowerCase().contains(ACCOUNT)) {
+                    if (message.getBody().equalsIgnoreCase(trigger_msg)) {
                         userStates.put(userFrom, UserStateEnum.OPTIONS);
                         sendMediaMessage.accept("Hello, " + message.getProfileName() + "!\n" +
                                 "Welcome to Sama.live. How can we assist you today?\n\n" +
                                 "\u0031\uFE0F\u20E3 Press 1 to file a new case\n" +
                                 "\u0032\uFE0F\u20E3 Press 2 to search for an existing case");
+                    }else{
+                        sendMessage.accept("If you need assistance, simply send 'Hi@Sama'");
                     }
                     break;
                 case OPTIONS:
@@ -198,7 +207,7 @@ public class MessageController {
 
     public void sendMessage(String messageToSend, String to, String from) {
         try {
-            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            Twilio.init(account_sid, auth_token);
             Message message = Message.creator(
                     new com.twilio.type.PhoneNumber(to),
                     new com.twilio.type.PhoneNumber(from),
@@ -211,7 +220,7 @@ public class MessageController {
 
     public void sendMessageWithImages(String messageToSend, String to, String from) {
         try {
-            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            Twilio.init(account_sid, auth_token);
             Message message = Message.creator(
                     new com.twilio.type.PhoneNumber(to),
                     new com.twilio.type.PhoneNumber(from),

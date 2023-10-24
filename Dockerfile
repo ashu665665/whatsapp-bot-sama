@@ -1,5 +1,5 @@
 # Use an official OpenJDK runtime image as the parent image for the final stage
-FROM openjdk:11-jre-slim
+FROM openjdk:8-jdk
 
 # Set the working directory to /app
 VOLUME /tmp

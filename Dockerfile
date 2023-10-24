@@ -8,4 +8,4 @@ VOLUME /tmp
 ADD target/bot-0.0.1-SNAPSHOT.jar /app.jar
 
 # Specify the command to run your Spring Boot application with the environment file
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]

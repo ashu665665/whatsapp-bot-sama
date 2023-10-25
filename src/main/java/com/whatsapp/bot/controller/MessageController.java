@@ -130,8 +130,8 @@ public class MessageController {
             case FILE_A_CASE_CHOOSE_CATEGORY:
                 fileCase.put(userFrom, UserStateEnum.FILE_A_CASE_COMPLAINT_INFO);
                 fileCaseRequest.setComplainantEmail(message.getBody());
-                fileCaseRequest.setComplainantName("COMPLAINT NAME");
-                fileCaseRequest.setComplainantPhone("COMPLAINT PHONE");
+                fileCaseRequest.setComplainantName(message.getProfileName());
+                fileCaseRequest.setComplainantPhone(userFrom.substring(userFrom.length()-10,userFrom.length()));
                 sendMessage.accept("Please provide your email address \uD83D\uDCE7");
                 break;
             case FILE_A_CASE_COMPLAINT_INFO:
